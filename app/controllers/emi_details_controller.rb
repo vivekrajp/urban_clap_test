@@ -1,4 +1,10 @@
 class EmiDetailsController < ApplicationController
+
+	##
+	# Show
+	# Params[:amount]
+	# JSON
+	# Gets banks, tenure, rates that provides loan for that a amount
 	def show
 		require 'csv'    
 
@@ -7,7 +13,6 @@ class EmiDetailsController < ApplicationController
 
 		emi_details = []
 		emi_rate_csv.each do |row|
-		  puts row.inspect
 		  if row["Minimum"].to_i <= params["amount"].to_i
 		  	updated_already_exists = false
 		  	emi_details.each do |emi_detail|
@@ -19,8 +24,6 @@ class EmiDetailsController < ApplicationController
 		  	emi_details << {"bank": row["Lender"], "tenures": [{"months": row["Tenure"], "rate": row["Rate"], "mininum_amount": row["Minimum"]}]} unless updated_already_exists
 		  end	
 		end
-
-		puts emi_details.inspect
 
 	    render json: emi_details
 	end	
